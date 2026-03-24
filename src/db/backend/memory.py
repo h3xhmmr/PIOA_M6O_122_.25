@@ -1,4 +1,4 @@
-from . import errors
+from .errors import check_age, check_id, check_num
 
 type UserRecord = tuple[int, str, str, int, str]
 
@@ -11,7 +11,7 @@ def create_record(user_id: int,
                   age: int, 
                   phone_num: str) -> UserRecord:
     
-    a_check = errors.check_age(age)
+    a_check = check_age(age)
     if a_check != None:
         raise a_check
     
@@ -20,7 +20,7 @@ def create_record(user_id: int,
             raise ValueError("Запись с таким номером пользователя({user_id}) уже существует")
 
     
-    n_check = errors.check_num(phone_num)
+    n_check = check_num(phone_num)
     if n_check != None:
         raise n_check
 
@@ -39,8 +39,8 @@ def create_record(user_id: int,
 
     return new_record
 
-def delete_record(user_id: int) -> UserRecord:
-    i_check = errors.check_id(user_id)
+def delete_record(user_id: int) -> UserRecord: #ПЕРЕДЕЛАТЬ РЕАЛИЗАЦИЮ, ПОИСК НЕ ПО ИНДЕКСУ МАССИВА
+    i_check = check_id(user_id, Users)
     if i_check != None:
         raise i_check
     del_record = Users.pop(user_id)
@@ -57,13 +57,14 @@ def select_record(user_id: int | None = None,
     #сразу сказать ему в tui, что он ничего по ним не найдет
     #ошибки отловятся в tui и вызовется новый интерфейс по типу
     #"вы уверенны в корректности данных? да/нет"
-    a_check = errors.check_age(age) 
+    a_check = check_age(age) 
     if a_check != None:         
         raise a_check
     
-    i_check = errors.check_id(user_id)
-    if i_check != None:
-        raise i_check
+    if user_id != None:
+        i_check = check_id(user_id, Users)
+        if i_check != None:
+            raise i_check
 
     if (
         user_id is None
@@ -96,15 +97,16 @@ def update_record(user_id: int | None = None,
                   age: int | None = None, 
                   phone_num: str | None = None) -> UserRecord:
     #тут тоже дальнейший отлов ошибок ввода
-    i_check = errors.check_id(user_id)
-    if i_check != None:
-        raise i_check
+    if user_id != None:
+        i_check = check_id(user_id, Users)
+        if i_check != None:
+            raise i_check
     
-    a_check = errors.check_age(age) 
+    a_check = check_age(age) 
     if a_check != None:         
         raise a_check
     
-    n_check = errors.check_num(phone_num) 
+    n_check = check_num(phone_num) 
     if n_check != None:         
         raise n_check
     
