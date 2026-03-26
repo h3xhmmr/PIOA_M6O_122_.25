@@ -3,9 +3,10 @@ def _print_menu() -> None:
     print("\n====== База пользователей ======")
     print("1. Добавить запись")
     print("2. Обновить данные пользователя")
-    print("3. Найти записи по фильтру")
+    print("3. Найти запись по id")
     print("4. Показать все записи")
     print("5. Удалить пользователя")
+    print("6. Найти запись по фильтру")
     print("0. Выйти")
 
 def _read_int(prompt: str) -> int:
@@ -30,7 +31,7 @@ def _add_user() -> None:
         print(f"Запись добавлена: {record}")
 
     except ValueError as exc:
-        print(f"Ошибка: {exc}")
+        print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
 
 def _update_user() -> None:
     user_id = _read_int("id: ")
@@ -47,7 +48,7 @@ def _update_user() -> None:
                       phone_num = phone_num)
         print(f"Запись с номером {user_id} обновлена")
     except ValueError as exc:
-        print(f"Ошибка: {exc}")
+        print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
 
 def _print_records(records: list[tuple[int, str, str, int, str]]) -> None:
     if not records:
@@ -76,6 +77,14 @@ def _read_optional_int(prompt: str) -> int | None:
         except ValueError:
             print("Ошибка: введите целое число или оставьте поле пустым.")
 
+def _find_user() -> None:
+    user_id = _read_int("id: ")
+    try:
+        record = select_record(user_id = user_id)
+        print(record)
+    except ValueError as exc:
+        print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
+
 def _find_users_by_filter() -> None:
     print("\nПоиск по фильтру (Enter = пропустить поле)")
 
@@ -95,14 +104,15 @@ def _find_users_by_filter() -> None:
         )
         _print_records(records)
     except ValueError as exc:
-        print(f"Ошибка: {exc}")
+        print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
 
-def _delete_user() -> list[tuple[int, str, str, int, str]]:
+def _delete_user():
     user_id = _read_optional_int("id: ")
     try:
-        delete_record(user_id)
+        lst = delete_record(user_id)
+        print(f"Запись с номером {lst} удалена")
     except ValueError as exc:
-        print(f"Ошибка: {exc}")
+        print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
 
 def run() -> None:
     while True:
@@ -117,13 +127,16 @@ def run() -> None:
             _update_user()
 
         elif action == "3":
-            _find_users_by_filter()
+            _find_user()
 
         elif action == "4":
             _show_all_users()
 
         elif action == "5":
            _delete_user()
+
+        elif action == "6":
+           _find_users_by_filter
 
         elif action == "0":
             print("Выход из программы.")

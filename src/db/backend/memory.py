@@ -39,12 +39,14 @@ def create_record(user_id: int,
 
     return new_record
 
-def delete_record(user_id: int) -> UserRecord: #ПЕРЕДЕЛАТЬ РЕАЛИЗАЦИЮ, ПОИСК НЕ ПО ИНДЕКСУ МАССИВА
+def delete_record(user_id: int) -> int:
     i_check = check_id(user_id, Users)
     if i_check != None:
         raise i_check
-    del_record = Users.pop(user_id)
-    return del_record
+    for i in range(len(Users)):
+        if Users[i][0] == user_id:
+            Users.pop(i)
+            return i + 1
 
 def select_record(user_id: int | None = None, 
                   name: str | None = None, 
@@ -76,20 +78,19 @@ def select_record(user_id: int | None = None,
         return Users.copy()
 
     for record in Users:
-        if user_id == None or record[0] != user_id:
+        if user_id != None and record[0] != user_id:
             continue
-        if name == None or record[1] != name:
+        if name != None and record[1] != name:
             continue
-        if sec_name == None or record[2] != sec_name:
+        if sec_name != None and record[2] != sec_name:
             continue
-        if age == None or record[3] != age:
+        if age != None and record[3] != age:
             continue
-        if phone_num == None or record[4] != phone_num:
+        if phone_num != None and record[4] != phone_num:
             continue
-
         selected_records.append(record)
 
-        return selected_records
+    return selected_records
 
 def update_record(user_id: int | None = None, 
                   name: str | None = None, 
