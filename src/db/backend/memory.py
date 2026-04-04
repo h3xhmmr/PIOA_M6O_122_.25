@@ -17,7 +17,7 @@ def create_record(user_id: int,
     
     for record in Users:
         if record[0] == user_id:
-            raise ValueError("Запись с таким номером пользователя({user_id}) уже существует")
+            raise ValueError(f"Запись с таким номером пользователя({user_id}) уже существует")
 
     
     n_check = check_num(phone_num)
@@ -77,6 +77,12 @@ def select_record(user_id: int | None = None,
     ):
         return Users.copy()
 
+    format_phone = ""
+    if phone_num[0] != "+":
+        format_phone = "+" + phone_num
+    else:
+        format_phone = phone_num
+
     for record in Users:
         if user_id != None and record[0] != user_id:
             continue
@@ -86,7 +92,7 @@ def select_record(user_id: int | None = None,
             continue
         if age != None and record[3] != age:
             continue
-        if phone_num != None and record[4] != phone_num:
+        if format_phone != None and record[4] != format_phone:
             continue
         selected_records.append(record)
 

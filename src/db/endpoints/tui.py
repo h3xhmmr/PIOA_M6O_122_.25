@@ -136,7 +136,7 @@ def run() -> None:
            _delete_user()
 
         elif action == "6":
-           _find_users_by_filter
+           _find_users_by_filter()
 
         elif action == "0":
             print("Выход из программы.")
