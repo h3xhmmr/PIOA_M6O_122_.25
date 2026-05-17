@@ -30,19 +30,19 @@ class UserTable:
         return rec
     
     def select_record(self,
-                      id: int | None,
-                      first_name: str | None,
-                      second_name: str | None,
-                      age: int | None,
-                      phone: str | None):
+                      id: int | None = None,
+                      first_name: str | None = None,
+                      second_name: str | None = None,
+                      age: int | None = None,
+                      phone: str | None = None) -> list[UserRecord]:
         selected_records: list[UserRecord] = []
         if (
-        id is None
-        and first_name is None
-        and second_name is None
-        and age is None
-        and phone is None
-    ):
+            id is None
+            and first_name is None
+            and second_name is None
+            and age is None
+            and phone is None
+        ):
             return self._user_table.copy()
 
         format_phone = ""
@@ -67,11 +67,11 @@ class UserTable:
         return selected_records
     
     def update_record(self,
-                      id: int | None,
-                      first_name: str | None,
-                      second_name: str | None,
-                      age: int | None,
-                      phone: str | None):
+                      id: int | None = None,
+                      first_name: str | None = None,
+                      second_name: str | None = None,
+                      age: int | None = None,
+                      phone: str | None = None):
         if id != None:
             i_check = errors.check_del_id(id, self._user_table)
         if i_check != None:
@@ -118,3 +118,13 @@ class UserTable:
                 self._user_table[i] = upd_record
                 break
         return upd_record
+    
+    def delete_record(self, id: int) -> UserRecord:
+        exc = errors.check_del_id(id, self._user_table)
+        if exc != None:
+            raise exc
+        for i in range(len(self._user_table)):
+            if self._user_table[i][0] == id:
+                deleted_rec = self._user_table[i]
+                self._user_table.pop(i)
+        return deleted_rec

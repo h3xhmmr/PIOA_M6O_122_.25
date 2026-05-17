@@ -122,14 +122,15 @@ class TestUserTable(unittest.TestCase):
     def test_delete_record(self):
         case_1 = (1, "Ja", "Morant", 26, "+12")
         case_2 = (2, "Giannis", "Freak", 31, "+34")
+        result = [(1, "Ja", "Morant", 26, "+12")]
 
         self.user_table.create_record(*case_1)
         self.user_table.create_record(*case_2)
 
         with self.subTest(test_data = case_1):
             self.user_table.delete_record(2)
-            remain = self.user_table.select_records()
-            self.assertEqual(case_1, remain)
+            remain = self.user_table.select_record()
+            self.assertEqual(result, remain)
 
     def test_delete_incorrect_id(self):
         case_1 = (1, "Ja", "Morant", 26, "+12")
