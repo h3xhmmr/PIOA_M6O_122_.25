@@ -127,4 +127,4 @@ class UserTable:
             if self._user_table[i][0] == id:
                 deleted_rec = self._user_table[i]
                 self._user_table.pop(i)
-        return deleted_rec
+                return deleted_rec
