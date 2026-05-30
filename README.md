@@ -32,3 +32,5 @@
 
 ### Запуск
 Для запуска необходима версия Python 3.14.3 и выше. `git clone https://github.com/h3xhmmr/PIOA_M6O_122_.25.git`. Запуск самого проекта `python -m src.db.endpoints`. Тесты `pytest --cov=src --cov-report=term-missing`
+
+![image.png]()
