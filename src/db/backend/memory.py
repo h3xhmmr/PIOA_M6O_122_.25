@@ -45,6 +45,11 @@ class UserTable(UserTableInterface):
         ):
             return self._user_table.copy()
 
+        if id is not None:
+            i_check = errors.check_del_id(id, self._user_table)
+            if i_check is not None:
+                raise i_check
+        
         format_phone = ""
         if phone != None and phone[0] != "+":
             format_phone = "+" + phone

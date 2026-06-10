@@ -1,5 +1,6 @@
 from src.db.backend.interface import UserTableInterface
 from src.db.backend.memory import UserTable
+import src.db.backend.errors as errors
 
 
 class Application:
@@ -50,7 +51,7 @@ class Application:
             print(f"Запись добавлена: {record}")
 
         except ValueError as exc:
-            print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
+            print(f"Ошибка: {exc}")
 
     def _update_user(self) -> None:
         user_id = self._read_int("id: ")
@@ -67,7 +68,7 @@ class Application:
                         phone = phone_num)
             print(f"Запись с номером {user_id} обновлена")
         except ValueError as exc:
-            print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
+            print(f"Ошибка: {exc}")
 
     def _print_records(self, records: list[tuple[int, str, str, int, str]]) -> None:
         if not records:
@@ -95,39 +96,31 @@ class Application:
                 phone=phone_num,
             )
             self._print_records(records)
-        except ValueError as exc:
-            print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
+        except errors.DuplicateIDError as exc:
+            print("Записи не найдены")
 
     def _find_user(self) -> None:
         user_id = self._read_int("id: ")
         try:
             record = self._user_base.select_record(id = user_id)
             print(record)
-        except ValueError as exc:
-            print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
+        except errors.DuplicateIDError as exc:
+            print(f"Ошибка: {exc}")
 
     def _show_all_users(self) -> None:
         print("\n Список записей")
         try:
             self._print_records(self._user_base.select_record())
-        except ValueError as exc:
+        except errors.DuplicateIDError as exc:
             print(f"Ошибка: {exc}")
-
-    def _find_user(self) -> None:
-        user_id = self._read_int("id: ")
-        try:
-            record = self._select_record(id = user_id)
-            print(record)
-        except ValueError as exc:
-            print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
 
     def _delete_user(self):
         user_id = self._read_optional_int("id: ")
         try:
             lst = self._user_base.delete_record(user_id)
             print(f"Запись {lst} удалена")
-        except ValueError as exc:
-            print(f"Ошибка: {exc}, проверьте корректность вводимых данных")
+        except errors.DuplicateIDError as exc:
+            print(f"Ошибка: {exc}")
 
     def run(self):
         while True:
@@ -136,22 +129,22 @@ class Application:
             action = input("Выберите действие: ").strip()
 
             if action == "1":
-                self.user_base._add_user()
+                self._add_user()
 
             elif action == "2":
-                self.user_base._update_user()
+                self._update_user()
 
             elif action == "3":
-                self.user_base._find_user()
+                self._find_user()
 
             elif action == "4":
-                self.user_base._show_all_users()
+                self._show_all_users()
 
             elif action == "5":
-                self.user_base._delete_user()
+                self._delete_user()
 
             elif action == "6":
-                self.user_base._find_users_by_filter()
+                self._find_users_by_filter()
 
             elif action == "0":
                 print("Выход из программы.")
