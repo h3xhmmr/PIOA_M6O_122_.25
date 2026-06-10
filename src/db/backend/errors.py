@@ -46,3 +46,19 @@ class DuplicateIDError(UserTableError):
 class InvalidPhoneError(UserTableError):
     def __init__(self, message):
         self.message = message
+
+class StorageError(UserTableError):
+    def __init__(self, message):
+        self.message = message
+
+class StorageReadError(StorageError):
+    def __init__(self, message):
+        self.message = message
+
+class StorageWriteError(StorageError):
+    def __init__(self, message):
+        self.message = message
+
+class CorruptDataError(StorageError):
+    def __init__(self, message):
+        self.message = message
