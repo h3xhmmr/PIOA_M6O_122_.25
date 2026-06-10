@@ -1,8 +1,10 @@
+from src.db.backend.interface import UserTableInterface
 from src.db.backend.memory import UserTable
 
+
 class Application:
-    def __init__(self):
-        self._user_base = UserTable()
+    def __init__(self, user_base: UserTableInterface | None = None):
+        self._user_base = user_base if user_base is not None else UserTable()
 
     def _print_menu(self) -> None:
         print("\n====== База пользователей ======")
