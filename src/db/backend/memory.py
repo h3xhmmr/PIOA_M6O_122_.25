@@ -1,9 +1,9 @@
 from . import errors
+from .interface import UserRecord
+from .interface import UserTableInterface
 
-type UserRecord = tuple[int, str, str, int, str]
 
-
-class UserTable:
+class UserTable(UserTableInterface):
     def __init__(self):
         self._user_table: list[UserRecord] = []
 
