@@ -72,10 +72,10 @@ class UserTable:
                       second_name: str | None = None,
                       age: int | None = None,
                       phone: str | None = None):
-        if id != None:
+        if id != None: 
             i_check = errors.check_del_id(id, self._user_table)
-        if i_check != None:
-            raise i_check
+            if i_check != None:
+                raise i_check
         
         a_check = errors.check_age(age) 
         if a_check != None:         
@@ -84,6 +84,11 @@ class UserTable:
         n_check = errors.check_phone(phone) 
         if n_check != None:         
             raise n_check
+        format_phone = ""
+        if phone != None and phone[0] != "+":
+            format_phone = "+" + phone
+        else:
+          format_phone = phone
         
         for i in range(len(self._user_table)):
                 if self._user_table[i][0] == id:
@@ -102,7 +107,7 @@ class UserTable:
                     if phone == None:
                         upd_phone = self._user_table[i][4]
                     else:
-                        upd_phone = phone
+                        upd_phone = format_phone
 
         upd_record: UserRecord = (
             id,

@@ -27,7 +27,7 @@ class TestApplication(unittest.TestCase):
 
         for test_case in cases:
             with self.subTest(test_data = test_case):
-                record = self.Application.create_user(*test_case)
+                record = self.Application._user_base.create_user(*test_case)
                 self.assertEqual(record, test_case)
 
     def test_create_user_negative_age(self):
@@ -41,4 +41,4 @@ class TestApplication(unittest.TestCase):
         err_mesage = "Возраст не может быть отрицательным"
 
         for test_case in cases:
-            self.assertEqual(self.Application.create_user(*test_case), err_mesage)
+            self.assertEqual(self.Application._user_base.create_user(*test_case), err_mesage)
