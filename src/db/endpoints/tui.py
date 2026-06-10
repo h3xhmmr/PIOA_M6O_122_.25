@@ -136,22 +136,22 @@ class Application:
             action = input("Выберите действие: ").strip()
 
             if action == "1":
-                self._add_user()
+                self.user_base._add_user()
 
             elif action == "2":
-                self._update_user()
+                self.user_base._update_user()
 
             elif action == "3":
-                self._find_user()
+                self.user_base._find_user()
 
             elif action == "4":
-                self._show_all_users()
+                self.user_base._show_all_users()
 
             elif action == "5":
-                self._delete_user()
+                self.user_base._delete_user()
 
             elif action == "6":
-                self._find_users_by_filter()
+                self.user_base._find_users_by_filter()
 
             elif action == "0":
                 print("Выход из программы.")
