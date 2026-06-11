@@ -24,7 +24,7 @@ def check_phone(phone: str) -> Invaluser_idPhoneError:
     return None
         
 def check_age(age: int) -> Invaluser_idAgeError:
-    if age != None and age < 0:
+    if age is not None and age < 0:
         return Invaluser_idAgeError("Возраст не может быть отрицательным")
     else:
         return None
