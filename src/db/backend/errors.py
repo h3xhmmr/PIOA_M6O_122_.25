@@ -1,5 +1,38 @@
 type UserRecord = tuple[int, str, str, int, str]
 
+class UserTableError(Exception):
+     def __init__(self, message=""):
+        super().__init__(message)
+        self.message = message
+
+class InvalidAgeError(UserTableError):
+    def __init__(self, message):
+        super().__init__(message)
+
+class DuplicateIDError(UserTableError):
+    def __init__(self, message):
+        super().__init__(message)
+
+class InvalidPhoneError(UserTableError):
+    def __init__(self, message):
+        super().__init__(message)
+
+class StorageError(UserTableError):
+    def __init__(self, message):
+        super().__init__(message)
+
+class StorageReadError(StorageError):
+    def __init__(self, message):
+        super().__init__(message)
+
+class StorageWriteError(StorageError):
+    def __init__(self, message):
+        super().__init__(message)
+
+class CorruptDataError(StorageError):
+    def __init__(self, message):
+        super().__init__(message)
+
 def check_phone(phone: str) -> InvalidPhoneError:
     for number in str(phone).replace(" ", "").replace("-", ""):
         if number not in "+1234567890":
@@ -12,15 +45,15 @@ def check_age(age: int) -> InvalidAgeError:
     else:
         return None
     
-def check_del_id(id: int, list: list[UserRecord]) -> DuplicateIDError:
-    for record in list:
+def check_del_id(id: int, records: list[UserRecord]) -> DuplicateIDError:
+    for record in records:
         if record[0] == id:
             return None
     return DuplicateIDError("Такого id не существует или оно уже удалено")
 
-def check_create_id(id: int, list: list[UserRecord]) -> DuplicateIDError:
+def check_create_id(id: int, records: list[UserRecord]) -> DuplicateIDError:
     flag = False
-    for record in list:
+    for record in records:
         if record[0] == id:
             flag = True
             break
@@ -30,35 +63,3 @@ def check_create_id(id: int, list: list[UserRecord]) -> DuplicateIDError:
         return DuplicateIDError("Такое id уже существует")
     else:
         return None
-
-class UserTableError(Exception):
-    def __init__(self):
-        self.message = ""
-
-class InvalidAgeError(UserTableError):
-    def __init__(self, message):
-        self.message = message
-
-class DuplicateIDError(UserTableError):
-    def __init__(self, message):
-        self.message = message
-
-class InvalidPhoneError(UserTableError):
-    def __init__(self, message):
-        self.message = message
-
-class StorageError(UserTableError):
-    def __init__(self, message):
-        self.message = message
-
-class StorageReadError(StorageError):
-    def __init__(self, message):
-        self.message = message
-
-class StorageWriteError(StorageError):
-    def __init__(self, message):
-        self.message = message
-
-class CorruptDataError(StorageError):
-    def __init__(self, message):
-        self.message = message

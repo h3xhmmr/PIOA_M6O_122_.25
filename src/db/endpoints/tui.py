@@ -50,7 +50,7 @@ class Application:
             record = self._user_base.create_record(user_id, name, sec_name, age, phone_num)
             print(f"Запись добавлена: {record}")
 
-        except ValueError as exc:
+        except (errors.InvalidPhoneError, errors.InvalidAgeError, errors.DuplicateIDError) as exc:
             print(f"Ошибка: {exc}")
 
     def _update_user(self) -> None:
@@ -67,7 +67,7 @@ class Application:
                         age = age, 
                         phone = phone_num)
             print(f"Запись с номером {user_id} обновлена")
-        except ValueError as exc:
+        except (errors.InvalidPhoneError, errors.InvalidAgeError, errors.DuplicateIDError) as exc:
             print(f"Ошибка: {exc}")
 
     def _print_records(self, records: list[tuple[int, str, str, int, str]]) -> None:
@@ -86,33 +86,24 @@ class Application:
         sec_name = input("second_name: ").strip() or None
         age = self._read_optional_int("age: ")
         phone_num = input("phone_number: ").strip() or None
-
-        try:
-            records = self._user_base.select_record(
-                id=user_id,
-                first_name=name,
-                second_name=sec_name,
-                age=age,
-                phone=phone_num,
-            )
-            self._print_records(records)
-        except errors.DuplicateIDError as exc:
-            print("Записи не найдены")
+        
+        records = self._user_base.select_record(
+            id=user_id,
+            first_name=name,
+            second_name=sec_name,
+            age=age,
+            phone=phone_num,
+        )
+        self._print_records(records)
 
     def _find_user(self) -> None:
         user_id = self._read_int("id: ")
-        try:
-            record = self._user_base.select_record(id = user_id)
-            print(record)
-        except errors.DuplicateIDError as exc:
-            print(f"Ошибка: {exc}")
-
+        record = self._user_base.select_record(id = user_id)
+        print(record)
+        
     def _show_all_users(self) -> None:
         print("\n Список записей")
-        try:
-            self._print_records(self._user_base.select_record())
-        except errors.DuplicateIDError as exc:
-            print(f"Ошибка: {exc}")
+        self._print_records(self._user_base.select_record())
 
     def _delete_user(self):
         user_id = self._read_optional_int("id: ")
