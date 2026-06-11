@@ -7,7 +7,7 @@ class UserTableInterface(ABC):
     @abstractmethod
     def create_record(
         self,
-        id: int,
+        user_id: int,
         first_name: str,
         second_name: str,
         age: int,
@@ -18,7 +18,7 @@ class UserTableInterface(ABC):
     @abstractmethod
     def select_record(
         self,
-        id: int | None = None,
+        user_id: int | None = None,
         first_name: str | None = None,
         second_name: str | None = None,
         age: int | None = None,
@@ -29,7 +29,7 @@ class UserTableInterface(ABC):
     @abstractmethod
     def update_record(
         self,
-        id: int | None = None,
+        user_id: int | None = None,
         first_name: str | None = None,
         second_name: str | None = None,
         age: int | None = None,
@@ -38,5 +38,5 @@ class UserTableInterface(ABC):
         pass
 
     @abstractmethod
-    def delete_record(self, id: int) -> UserRecord:
+    def delete_record(self, user_id: int) -> UserRecord:
         pass

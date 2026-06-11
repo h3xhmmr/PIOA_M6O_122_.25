@@ -33,11 +33,11 @@ class TestUserTable(unittest.TestCase):
 
         for test_case in cases:
             with self.subTest(test_data = test_case):
-                with self.assertRaises(errors.InvalidAgeError) as context:
+                with self.assertRaises(errors.Invaluser_idAgeError) as context:
                     self.user_table.create_record(*test_case)
         self.assertEqual(str(context.exception), err_mesage)
 
-    def test_create_record_invalid_phone_number(self):
+    def test_create_record_invaluser_id_phone_number(self):
         cases = [
             (1, "Loh", "Lohov", 23, "+1b3456a890"),
             (2, "Tupac", "Shakur", 25, "*ACAB"),
@@ -49,18 +49,18 @@ class TestUserTable(unittest.TestCase):
 
         for test_case in cases:
             with self.subTest(test_data = test_case):
-                with self.assertRaises(errors.InvalidPhoneError) as context:
+                with self.assertRaises(errors.Invaluser_idPhoneError) as context:
                     self.user_table.create_record(*test_case)
         self.assertEqual(str(context.exception), err_mesage)
 
-    def test_create_record_duplicate_id(self):
+    def test_create_record_duplicate_user_id(self):
         test_case_1 = (1, "Sanya", "Pushkin", 18, "1234567890")
         test_case_2 = (1, "Serega", "Colotushkin", 81, "0987654321")
 
-        err_message = "Такое id уже существует"
+        err_message = "Такое user_id уже существует"
         self.user_table.create_record(*test_case_1)
 
-        with self.assertRaises(errors.DuplicateIDError) as context:
+        with self.assertRaises(errors.Duplicateuser_idError) as context:
                 self.user_table.create_record(*test_case_2)
         self.assertEqual(str(context.exception), err_message)
 
@@ -83,7 +83,7 @@ class TestUserTable(unittest.TestCase):
                 "expected": test_datas,
             },
             {
-                "name": "Фильтр по ID",
+                "name": "Фильтр по user_id",
                 "filters": [1, None, None, None, None],
                 "expected": [test_datas[0]],
             },
@@ -132,15 +132,15 @@ class TestUserTable(unittest.TestCase):
             remain = self.user_table.select_record()
             self.assertEqual(result, remain)
 
-    def test_delete_incorrect_id(self):
+    def test_delete_incorrect_user_id(self):
         case_1 = (1, "Ja", "Morant", 26, "+12")
         case_2 = (2, "Giannis", "Freak", 31, "+34")
 
         self.user_table.create_record(*case_1)
         self.user_table.create_record(*case_2)
-        err_message = "Такого id не существует или оно уже удалено"
+        err_message = "Такого user_id не существует или оно уже удалено"
 
-        with self.assertRaises(errors.DuplicateIDError) as context:
+        with self.assertRaises(errors.Duplicateuser_idError) as context:
             self.user_table.delete_record(3)
         self.assertEqual(str(context.exception), err_message)
 
@@ -164,22 +164,22 @@ class TestUserTable(unittest.TestCase):
                 rec = self.user_table.update_record(*test["upd"])
             self.assertEqual(test["res"], rec)
 
-    def test_invalid_update_record(self):
+    def test_invaluser_id_update_record(self):
         case = (1, "Ja", "Morant", 26, "+12")
         test_cases = [{
                         "upd": (2, "Giannis", "Freak", 31, "+34"),
-                        "err": "Такого id не существует или оно уже удалено",
-                        "err_type": errors.DuplicateIDError
+                        "err": "Такого user_id не существует или оно уже удалено",
+                        "err_type": errors.Duplicateuser_idError
                        },
                        {
                         "upd": (1, "Giannis", "Freak", -31, "+34"),
                         "err": "Возраст не может быть отрицательным",
-                        "err_type": errors.InvalidAgeError
+                        "err_type": errors.Invaluser_idAgeError
                        },
                        {
                         "upd": (1, "Giannis", "Freak", 31, "ACAB"),
                         "err": "Некорректный номер телефона",
-                        "err_type": errors.InvalidPhoneError
+                        "err_type": errors.Invaluser_idPhoneError
                        }]
 
         self.user_table.create_record(*case)

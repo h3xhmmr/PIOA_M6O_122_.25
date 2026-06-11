@@ -11,7 +11,7 @@ class Application:
         print("\n====== База пользователей ======")
         print("1. Добавить запись")
         print("2. Обновить данные пользователя")
-        print("3. Найти запись по id")
+        print("3. Найти запись по user_id")
         print("4. Показать все записи")
         print("5. Удалить пользователя")
         print("6. Найти запись по фильтру")
@@ -40,34 +40,34 @@ class Application:
     def _add_user(self) -> None:
         print("\n Добавление записи")
 
-        user_id = self._read_int("id: ")
+        user_user_id = self._read_int("user_id: ")
         name = input("first_name: ").strip()
         sec_name = input("second_name: ").strip()
         age = self._read_int("age: ")
         phone_num = input("phone_number: ").strip()
 
         try:
-            record = self._user_base.create_record(user_id, name, sec_name, age, phone_num)
+            record = self._user_base.create_record(user_user_id, name, sec_name, age, phone_num)
             print(f"Запись добавлена: {record}")
 
-        except (errors.InvalidPhoneError, errors.InvalidAgeError, errors.DuplicateIDError) as exc:
+        except (errors.Invaluser_idPhoneError, errors.Invaluser_idAgeError, errors.Duplicateuser_idError) as exc:
             print(f"Ошибка: {exc}")
 
     def _update_user(self) -> None:
-        user_id = self._read_int("id: ")
+        user_user_id = self._read_int("user_id: ")
         name = input("first_name: ").strip()
         sec_name = input("second_name: ").strip()
         age = self._read_optional_int("age: ")
         phone_num = input("phone_number: ").strip()
 
         try:
-            self._user_base.update_record(id = user_id, 
+            self._user_base.update_record(user_id = user_user_id, 
                         first_name = name, 
                         second_name = sec_name, 
                         age = age, 
                         phone = phone_num)
-            print(f"Запись с номером {user_id} обновлена")
-        except (errors.InvalidPhoneError, errors.InvalidAgeError, errors.DuplicateIDError) as exc:
+            print(f"Запись с номером {user_user_id} обновлена")
+        except (errors.Invaluser_idPhoneError, errors.Invaluser_idAgeError, errors.Duplicateuser_idError) as exc:
             print(f"Ошибка: {exc}")
 
     def _print_records(self, records: list[tuple[int, str, str, int, str]]) -> None:
@@ -81,14 +81,14 @@ class Application:
     def _find_users_by_filter(self) -> None:
         print("\n Поиск по фильтру (Enter = пропустить поле)")
 
-        user_id = self._read_optional_int("id: ")
+        user_user_id = self._read_optional_int("user_id: ")
         name = input("first_name: ").strip() or None
         sec_name = input("second_name: ").strip() or None
         age = self._read_optional_int("age: ")
         phone_num = input("phone_number: ").strip() or None
         
         records = self._user_base.select_record(
-            id=user_id,
+            user_id=user_user_id,
             first_name=name,
             second_name=sec_name,
             age=age,
@@ -97,8 +97,8 @@ class Application:
         self._print_records(records)
 
     def _find_user(self) -> None:
-        user_id = self._read_int("id: ")
-        record = self._user_base.select_record(id = user_id)
+        user_user_id = self._read_int("user_id: ")
+        record = self._user_base.select_record(user_id = user_user_id)
         print(record)
         
     def _show_all_users(self) -> None:
@@ -106,11 +106,11 @@ class Application:
         self._print_records(self._user_base.select_record())
 
     def _delete_user(self):
-        user_id = self._read_optional_int("id: ")
+        user_user_id = self._read_optional_int("user_id: ")
         try:
-            lst = self._user_base.delete_record(user_id)
+            lst = self._user_base.delete_record(user_user_id)
             print(f"Запись {lst} удалена")
-        except errors.DuplicateIDError as exc:
+        except errors.Duplicateuser_idError as exc:
             print(f"Ошибка: {exc}")
 
     def run(self):

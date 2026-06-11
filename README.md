@@ -9,7 +9,7 @@
 ### Основной функционал
 
 - CRUD-операции через единый интерфейс `UserTableInterface`
-- Проверка ошибок: отрицательный возраст, некорректный номер телефона, дублирующийся id
+- Проверка ошибок: отрицательный возраст, некорректный номер телефона, дублирующийся user_id
 - Обработка ошибок чтения, записи и повреждённых файловых данных
 - Консольный интерфейс с выбором типа базы данных при запуске
 
@@ -49,9 +49,9 @@ task_python_1/
 | CSV       | `CsvFileUserTable` | `src/data/users.csv`  |
 
 
-Запись пользователя: `(id, first_name, second_name, age, phone)`.
+Запись пользователя: `(user_id, first_name, second_name, age, phone)`.
 
-CSV-файл содержит заголовок `id,first_name,second_name,age,phone` и строки данных. При ошибках чтения/записи выбрасываются `StorageReadError` / `StorageWriteError`, при некорректном содержимом — `CorruptDataError`.
+CSV-файл содержит заголовок `user_id,first_name,second_name,age,phone` и строки данных. При ошибках чтения/записи выбрасываются `StorageReadError` / `StorageWriteError`, при некорректном содержимом — `CorruptDataError`.
 
 ### Запуск
 

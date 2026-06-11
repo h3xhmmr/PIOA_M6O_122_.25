@@ -8,7 +8,7 @@ from .interface import UserTableInterface
 from .memory import UserTable
 
 DEFAULT_DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "users.csv"
-CSV_FIELDNAMES = ("id", "first_name", "second_name", "age", "phone")
+CSV_FIELDNAMES = ("user_id", "first_name", "second_name", "age", "phone")
 
 
 class CsvFileUserTable(UserTableInterface):
@@ -26,7 +26,7 @@ class CsvFileUserTable(UserTableInterface):
             )
 
         try:
-            record_id = int(row["id"])
+            record_user_id = int(row["user_id"])
             age = int(row["age"])
         except ValueError as exc:
             raise errors.CorruptDataError(
@@ -47,7 +47,7 @@ class CsvFileUserTable(UserTableInterface):
                 f"Некорректная запись в CSV-файле (строка {line_number})"
             )
 
-        return (record_id, first_name, second_name, age, phone)
+        return (record_user_id, first_name, second_name, age, phone)
 
     def _load(self) -> None:
         if not self._file_path.exists():
@@ -97,7 +97,7 @@ class CsvFileUserTable(UserTableInterface):
             for record in self._storage.select_record():
                 writer.writerow(
                     {
-                        "id": record[0],
+                        "user_id": record[0],
                         "first_name": record[1],
                         "second_name": record[2],
                         "age": record[3],
@@ -112,26 +112,26 @@ class CsvFileUserTable(UserTableInterface):
 
     def create_record(
         self,
-        id: int,
+        user_id: int,
         first_name: str,
         second_name: str,
         age: int,
         phone: str,
     ) -> UserRecord:
-        record = self._storage.create_record(id, first_name, second_name, age, phone)
+        record = self._storage.create_record(user_id, first_name, second_name, age, phone)
         self._save()
         return record
 
     def select_record(
         self,
-        id: int | None = None,
+        user_id: int | None = None,
         first_name: str | None = None,
         second_name: str | None = None,
         age: int | None = None,
         phone: str | None = None,
     ) -> list[UserRecord]:
         return self._storage.select_record(
-            id=id,
+            user_id=user_id,
             first_name=first_name,
             second_name=second_name,
             age=age,
@@ -140,14 +140,14 @@ class CsvFileUserTable(UserTableInterface):
 
     def update_record(
         self,
-        id: int | None = None,
+        user_id: int | None = None,
         first_name: str | None = None,
         second_name: str | None = None,
         age: int | None = None,
         phone: str | None = None,
     ) -> UserRecord:
         record = self._storage.update_record(
-            id=id,
+            user_id=user_id,
             first_name=first_name,
             second_name=second_name,
             age=age,
@@ -156,7 +156,7 @@ class CsvFileUserTable(UserTableInterface):
         self._save()
         return record
 
-    def delete_record(self, id: int) -> UserRecord:
-        record = self._storage.delete_record(id)
+    def delete_record(self, user_id: int) -> UserRecord:
+        record = self._storage.delete_record(user_id)
         self._save()
         return record

@@ -15,7 +15,7 @@ class FileUserTable(UserTableInterface):
         self._storage = UserTable()
         self._load()
 
-    def _is_valid_record(self, item: object) -> bool:
+    def _is_valuser_id_record(self, item: object) -> bool:
         return (
             isinstance(item, (list, tuple))
             and len(item) == 5
@@ -52,7 +52,7 @@ class FileUserTable(UserTableInterface):
 
         records: list[UserRecord] = []
         for item in data:
-            if not self._is_valid_record(item):
+            if not self._is_valuser_id_record(item):
                 raise errors.CorruptDataError("Некорректная запись в файле базы данных")
             records.append(tuple(item))
 
@@ -74,26 +74,26 @@ class FileUserTable(UserTableInterface):
 
     def create_record(
         self,
-        id: int,
+        user_id: int,
         first_name: str,
         second_name: str,
         age: int,
         phone: str,
     ) -> UserRecord:
-        record = self._storage.create_record(id, first_name, second_name, age, phone)
+        record = self._storage.create_record(user_id, first_name, second_name, age, phone)
         self._save()
         return record
 
     def select_record(
         self,
-        id: int | None = None,
+        user_id: int | None = None,
         first_name: str | None = None,
         second_name: str | None = None,
         age: int | None = None,
         phone: str | None = None,
     ) -> list[UserRecord]:
         return self._storage.select_record(
-            id=id,
+            user_id=user_id,
             first_name=first_name,
             second_name=second_name,
             age=age,
@@ -102,14 +102,14 @@ class FileUserTable(UserTableInterface):
 
     def update_record(
         self,
-        id: int | None = None,
+        user_id: int | None = None,
         first_name: str | None = None,
         second_name: str | None = None,
         age: int | None = None,
         phone: str | None = None,
     ) -> UserRecord:
         record = self._storage.update_record(
-            id=id,
+            user_id=user_id,
             first_name=first_name,
             second_name=second_name,
             age=age,
@@ -118,7 +118,7 @@ class FileUserTable(UserTableInterface):
         self._save()
         return record
 
-    def delete_record(self, id: int) -> UserRecord:
-        record = self._storage.delete_record(id)
+    def delete_record(self, user_id: int) -> UserRecord:
+        record = self._storage.delete_record(user_id)
         self._save()
         return record
