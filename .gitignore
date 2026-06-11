@@ -2,4 +2,6 @@
 **/__pytest_cache__/
 **/coverage/
 src/data/*.json
+src/data/*.csv
 test/test_db.json
+test/test_db.csv
