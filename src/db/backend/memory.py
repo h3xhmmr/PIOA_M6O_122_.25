@@ -8,7 +8,7 @@ class UserTable:
         self._user_table: list[UserRecord] = []
 
     def create_record(self,
-                      id: int,
+                      user_id: int,
                       first_name: str,
                       second_name: str,
                       age: int,
@@ -22,22 +22,22 @@ class UserTable:
         if errors.check_phone(phone) != None:
             raise errors.check_phone(phone)
         
-        if errors.check_create_id(id, self._user_table) != None:
-            raise errors.check_create_id(id, self._user_table)
+        if errors.check_create_user_id(user_id, self._user_table) != None:
+            raise errors.check_create_user_id(user_id, self._user_table)
         
-        rec: UserRecord = (id, first_name, second_name, age, phone)
+        rec: UserRecord = (user_id, first_name, second_name, age, phone)
         self._user_table.append(rec)
         return rec
     
     def select_record(self,
-                      id: int | None = None,
+                      user_id: int | None = None,
                       first_name: str | None = None,
                       second_name: str | None = None,
                       age: int | None = None,
                       phone: str | None = None) -> list[UserRecord]:
         selected_records: list[UserRecord] = []
         if (
-            id is None
+            user_id is None
             and first_name is None
             and second_name is None
             and age is None
@@ -52,7 +52,7 @@ class UserTable:
           format_phone = phone
 
         for record in self._user_table:
-            if id != None and record[0] != id:
+            if user_id != None and record[0] != user_id:
                 continue
             if first_name != None and record[1] != first_name:
                 continue
@@ -67,13 +67,13 @@ class UserTable:
         return selected_records
     
     def update_record(self,
-                      id: int | None = None,
+                      user_id: int | None = None,
                       first_name: str | None = None,
                       second_name: str | None = None,
                       age: int | None = None,
                       phone: str | None = None):
-        if id != None: 
-            i_check = errors.check_del_id(id, self._user_table)
+        if user_id != None: 
+            i_check = errors.check_del_user_id(user_id, self._user_table)
             if i_check != None:
                 raise i_check
         
@@ -91,7 +91,7 @@ class UserTable:
           format_phone = phone
         
         for i in range(len(self._user_table)):
-                if self._user_table[i][0] == id:
+                if self._user_table[i][0] == user_id:
                     if first_name == None:
                         upd_first_name = self._user_table[i][1]
                     else:
@@ -110,7 +110,7 @@ class UserTable:
                         upd_phone = format_phone
 
         upd_record: UserRecord = (
-            id,
+            user_id,
             upd_first_name,
             upd_second_name,
             upd_age,
@@ -119,17 +119,17 @@ class UserTable:
        
 
         for i in range(len(self._user_table)):
-            if self._user_table[i][0] == id:
+            if self._user_table[i][0] == user_id:
                 self._user_table[i] = upd_record
                 break
         return upd_record
     
-    def delete_record(self, id: int) -> UserRecord:
-        exc = errors.check_del_id(id, self._user_table)
+    def delete_record(self, user_id: int) -> UserRecord:
+        exc = errors.check_del_user_id(user_id, self._user_table)
         if exc != None:
             raise exc
         for i in range(len(self._user_table)):
-            if self._user_table[i][0] == id:
+            if self._user_table[i][0] == user_id:
                 deleted_rec = self._user_table[i]
                 self._user_table.pop(i)
                 return deleted_rec
