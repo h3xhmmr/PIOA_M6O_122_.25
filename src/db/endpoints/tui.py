@@ -106,7 +106,7 @@ class Application:
         self._print_records(self._user_base.select_record())
 
     def _delete_user(self):
-        user_user_id = self._read_optional_int("user_id: ")
+        user_user_id = self._read_int("user_id: ")
         try:
             lst = self._user_base.delete_record(user_user_id)
             print(f"Запись {lst} удалена")

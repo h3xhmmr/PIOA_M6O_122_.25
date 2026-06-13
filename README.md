@@ -70,7 +70,7 @@ python -m src.db.endpoints
 ### Тесты
 
 ```bash
-pytest --cov=src --cov-report=term-missing
+pytest --cov=src.db.backend --cov-report=term-missing
 ```
 
 Тесты покрывают in-memory, JSON и CSV реализации, включая сценарии с повреждёнными файлами и ошибками ввода-вывода.
