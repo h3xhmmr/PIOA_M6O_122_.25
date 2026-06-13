@@ -101,16 +101,9 @@ class Application:
     def _show_all_users(self) -> None:
         print("\n Список записей")
         self._print_records(self._user_base.select_record())
-        
-
-    def _find_user(self) -> None:
-        user_user_id = self._read_int("user_id: ")
-        record = self._select_record(user_id = user_user_id)
-        print(record)
-
 
     def _delete_user(self):
-        user_user_id = self._read_optional_int("user_id: ")
+        user_user_id = self._read_int("user_id: ")
         try:
             lst = self._user_base.delete_record(user_user_id)
             print(f"Запись {lst} удалена")

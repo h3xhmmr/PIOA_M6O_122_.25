@@ -17,10 +17,10 @@ class UserTable:
         if errors.check_age(age) is not None:
             raise errors.check_age(age)
         
-        if phone[0] != "+":
-            phone = "+" + phone
         if errors.check_phone(phone) is not None:
             raise errors.check_phone(phone)
+        if phone[0] != "+":
+            phone = "+" + phone
         
         if errors.check_create_user_id(user_id, self._user_table) is not None:
             raise errors.check_create_user_id(user_id, self._user_table)
@@ -67,7 +67,7 @@ class UserTable:
         return selected_records
     
     def update_record(self,
-                      user_id: int | None = None,
+                      user_id: int,
                       first_name: str | None = None,
                       second_name: str | None = None,
                       age: int | None = None,
@@ -92,19 +92,19 @@ class UserTable:
         
         for i in range(len(self._user_table)):
                 if self._user_table[i][0] == user_id:
-                    if first_name == None:
+                    if first_name is None:
                         upd_first_name = self._user_table[i][1]
                     else:
                         upd_first_name = first_name
-                    if second_name == None:
+                    if second_name is None:
                         upd_second_name = self._user_table[i][2]
                     else:
                         upd_second_name = second_name
-                    if age == None:
+                    if age is None:
                         upd_age = self._user_table[i][3]
                     else:
                         upd_age = age
-                    if phone == None:
+                    if phone is None:
                         upd_phone = self._user_table[i][4]
                     else:
                         upd_phone = format_phone

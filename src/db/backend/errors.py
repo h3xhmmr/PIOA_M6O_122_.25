@@ -1,23 +1,30 @@
 type UserRecord = tuple[int, str, str, int, str]
 
+
 class UserTableError(Exception):
      def __init__(self, message=""):
         super().__init__(message)
         self.message = message
 
+
 class Invaluser_idAgeError(UserTableError):
     def __init__(self, message):
         super().__init__(message)
+
 
 class Duplicateuser_idError(UserTableError):
     def __init__(self, message):
         super().__init__(message)
 
+
 class Invaluser_idPhoneError(UserTableError):
     def __init__(self, message):
         super().__init__(message)
 
+
 def check_phone(phone: str) -> Invaluser_idPhoneError:
+    if phone == "":
+        return Invaluser_idPhoneError("Некорректный номер телефона")
     for number in str(phone).replace(" ", "").replace("-", ""):
         if number not in "+1234567890":
             return Invaluser_idPhoneError("Некорректный номер телефона")
