@@ -8,6 +8,8 @@ from .memory import UserTable
 
 DEFAULT_DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "users.json"
 
+COLUMNS = ["user_id", "first_name", "second_name", "age", "phone"]
+
 
 class FileUserTable(UserTableInterface):
     def __init__(self, file_path: str | Path | None = None):
@@ -47,14 +49,38 @@ class FileUserTable(UserTableInterface):
                 f"Повреждённые данные в файле базы данных: {exc}"
             ) from exc
 
-        if not isinstance(data, list):
-            raise errors.CorruptDataError("Некорректный формат данных в файле базы данных")
+        if not isinstance(data, dict):
+            raise errors.CorruptDataError(
+                "Некорректная запись"
+            )
+        if "columns" not in data or "records" not in data:
+            raise errors.CorruptDataError(
+                "Некорректный формат данных"
+            )
+        if data["columns"] != COLUMNS:
+            raise errors.CorruptDataError(
+                f"Несовместимый набор столбцов: ожидается {COLUMNS}, получено {data['columns']}"
+            )
+        if not isinstance(data["records"], list):
+            raise errors.CorruptDataError("Поле 'records' должно быть списком")
 
         records: list[UserRecord] = []
-        for item in data:
-            if not self._is_valuser_id_record(item):
-                raise errors.CorruptDataError("Некорректная запись в файле базы данных")
-            records.append(tuple(item))
+        for idx, record_dict in enumerate(data["records"]):
+            if not isinstance(record_dict, dict):
+                raise errors.CorruptDataError(
+                    f"Запись {idx} не является объектом JSON"
+                )
+            try:
+                record_tuple = tuple(record_dict[col] for col in COLUMNS)
+            except KeyError as e:
+                raise errors.CorruptDataError(
+                    f"В записи {idx} отсутствует поле {e}"
+                ) from e
+            if not self._is_valuser_id_record(record_tuple):
+                raise errors.CorruptDataError(
+                    f"Запись {idx} содержит некорректные типы данных"
+                )
+            records.append(record_tuple)
 
         validate_error = errors.validate_table(records)
         if validate_error is not None:
@@ -63,11 +89,14 @@ class FileUserTable(UserTableInterface):
         self._storage._user_table.extend(records)
 
     def _save(self) -> None:
+        """Сохраняет текущие записи в JSON-файл в формате {"columns": [...], "records": [...]}."""
         try:
             self._file_path.parent.mkdir(parents=True, exist_ok=True)
-            data = [list(record) for record in self._storage.select_record()]
+            records = self._storage.select_record()  # список кортежей
+            records_as_dicts = [dict(zip(COLUMNS, record)) for record in records]
+            data_to_save = {"columns": COLUMNS, "records": records_as_dicts}
             self._file_path.write_text(
-                json.dumps(data, ensure_ascii=False, indent=2),
+                json.dumps(data_to_save, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
         except OSError as exc:
