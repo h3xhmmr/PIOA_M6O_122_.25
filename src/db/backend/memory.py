@@ -16,11 +16,11 @@ class UserTable(UserTableInterface):
         
         if errors.check_age(age) is not None:
             raise errors.check_age(age)
-        
-        if phone[0] != "+":
-            phone = "+" + phone
+
         if errors.check_phone(phone) is not None:
             raise errors.check_phone(phone)
+        if phone[0] != "+":
+            phone = "+" + phone
         
         if errors.check_create_user_id(user_id, self._user_table) is not None:
             raise errors.check_create_user_id(user_id, self._user_table)
@@ -49,7 +49,7 @@ class UserTable(UserTableInterface):
         if phone is not None and phone[0] != "+":
             format_phone = "+" + phone
         else:
-          format_phone = phone
+            format_phone = phone
 
         for record in self._user_table:
             if user_id is not None and record[0] != user_id:
@@ -81,14 +81,16 @@ class UserTable(UserTableInterface):
         if a_check is not None:         
             raise a_check
         
-        n_check = errors.check_phone(phone) 
-        if n_check is not None:         
-            raise n_check
-        format_phone = ""
+        if phone is not None:
+            n_check = errors.check_phone(phone) 
+            if n_check is not None:         
+                raise n_check
+            
         if phone is not None and phone[0] != "+":
+            format_phone = ""
             format_phone = "+" + phone
         else:
-          format_phone = phone
+            format_phone = phone
         
         for i in range(len(self._user_table)):
                 if self._user_table[i][0] == user_id:

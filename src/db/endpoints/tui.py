@@ -50,15 +50,21 @@ class Application:
             record = self._user_base.create_record(user_user_id, name, sec_name, age, phone_num)
             print(f"Запись добавлена: {record}")
 
-        except (errors.Invaluser_idPhoneError, errors.Invaluser_idAgeError, errors.Duplicateuser_idError) as exc:
+        except (errors.InvalidPhoneError, errors.InvalidAgeError, errors.DuplicateIdError) as exc:
             print(f"Ошибка: {exc}")
 
     def _update_user(self) -> None:
         user_user_id = self._read_int("user_id: ")
         name = input("first_name: ").strip()
+        if name == "":
+            name = None
         sec_name = input("second_name: ").strip()
+        if sec_name == "":
+            sec_name = None
         age = self._read_optional_int("age: ")
         phone_num = input("phone_number: ").strip()
+        if phone_num == "":
+            phone_num = None
 
         try:
             self._user_base.update_record(user_id = user_user_id, 
@@ -67,7 +73,7 @@ class Application:
                         age = age, 
                         phone = phone_num)
             print(f"Запись с номером {user_user_id} обновлена")
-        except (errors.Invaluser_idPhoneError, errors.Invaluser_idAgeError, errors.Duplicateuser_idError) as exc:
+        except (errors.InvalidPhoneError, errors.InvalidAgeError, errors.DuplicateIdError) as exc:
             print(f"Ошибка: {exc}")
 
     def _print_records(self, records: list[tuple[int, str, str, int, str]]) -> None:
@@ -110,7 +116,7 @@ class Application:
         try:
             lst = self._user_base.delete_record(user_user_id)
             print(f"Запись {lst} удалена")
-        except errors.Duplicateuser_idError as exc:
+        except errors.DuplicateIdError as exc:
             print(f"Ошибка: {exc}")
 
     def run(self):

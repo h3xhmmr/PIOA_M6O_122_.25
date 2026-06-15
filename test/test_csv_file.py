@@ -44,7 +44,7 @@ class TestCsvFileUserTable(unittest.TestCase):
 
         for test_case in cases:
             with self.subTest(test_data=test_case):
-                with self.assertRaises(errors.Invaluser_idAgeError) as context:
+                with self.assertRaises(errors.InvalidAgeError) as context:
                     self.user_table.create_record(*test_case)
         self.assertEqual(str(context.exception), err_message)
 
@@ -60,7 +60,7 @@ class TestCsvFileUserTable(unittest.TestCase):
 
         for test_case in cases:
             with self.subTest(test_data=test_case):
-                with self.assertRaises(errors.Invaluser_idPhoneError) as context:
+                with self.assertRaises(errors.InvalidPhoneError) as context:
                     self.user_table.create_record(*test_case)
         self.assertEqual(str(context.exception), err_message)
 
@@ -71,7 +71,7 @@ class TestCsvFileUserTable(unittest.TestCase):
         err_message = "Такое user_id уже существует"
         self.user_table.create_record(*test_case_1)
 
-        with self.assertRaises(errors.Duplicateuser_idError) as context:
+        with self.assertRaises(errors.DuplicateIdError) as context:
             self.user_table.create_record(*test_case_2)
         self.assertEqual(str(context.exception), err_message)
 
@@ -148,7 +148,7 @@ class TestCsvFileUserTable(unittest.TestCase):
         self.user_table.create_record(*case_2)
         err_message = "Такого user_id не существует или оно уже удалено"
 
-        with self.assertRaises(errors.Duplicateuser_idError) as context:
+        with self.assertRaises(errors.DuplicateIdError) as context:
             self.user_table.delete_record(3)
         self.assertEqual(str(context.exception), err_message)
 
@@ -180,17 +180,17 @@ class TestCsvFileUserTable(unittest.TestCase):
             {
                 "upd": (2, "Giannis", "Freak", 31, "+34"),
                 "err": "Такого user_id не существует или оно уже удалено",
-                "err_type": errors.Duplicateuser_idError,
+                "err_type": errors.DuplicateIdError,
             },
             {
                 "upd": (1, "Giannis", "Freak", -31, "+34"),
                 "err": "Возраст не может быть отрицательным",
-                "err_type": errors.Invaluser_idAgeError,
+                "err_type": errors.InvalidAgeError,
             },
             {
                 "upd": (1, "Giannis", "Freak", 31, "ACAB"),
                 "err": "Некорректный номер телефона",
-                "err_type": errors.Invaluser_idPhoneError,
+                "err_type": errors.InvalidPhoneError,
             },
         ]
 

@@ -85,6 +85,9 @@ class CsvFileUserTable(UserTableInterface):
                 continue
             records.append(self._parse_record(row, line_number))
 
+        validate_error = errors.validate_table(records)
+        if validate_error is not None:
+            raise validate_error
         self._storage = UserTable()
         self._storage._user_table.extend(records)
 

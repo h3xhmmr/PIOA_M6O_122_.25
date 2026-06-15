@@ -56,6 +56,9 @@ class FileUserTable(UserTableInterface):
                 raise errors.CorruptDataError("Некорректная запись в файле базы данных")
             records.append(tuple(item))
 
+        validate_error = errors.validate_table(records)
+        if validate_error is not None:
+            raise validate_error
         self._storage = UserTable()
         self._storage._user_table.extend(records)
 
